@@ -1,9 +1,49 @@
 import 'dart:ffi';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:uberclone/Screens/homescreen.dart';
+import 'registerScreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uberclone/main.dart';
 
 class LoginScreen extends StatelessWidget {
+  TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController passwordTextEditingController = TextEditingController();
+  static const String ScreenId = "LoginScreen";
   @override
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  displayToast(String mssg, BuildContext context) {
+    Fluttertoast.showToast(msg: mssg);
+  }
+  void loginUser(BuildContext context) async {
+    final firebaseUser = (await _firebaseAuth
+        .signInWithEmailAndPassword(
+        email: emailTextEditingController.text.trim(),
+        password: passwordTextEditingController.text.trim())
+        .catchError(
+          (errMsg) {
+        print(errMsg);
+        displayToast("Error: " + errMsg.toString(), context);
+      },
+    ))
+        .user;
+    if (firebaseUser != null) {
+      UserReference.child(firebaseUser.uid).once().then((DataSnapshot snap) {
+        if (snap.value != null) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, HomeScreen.ScreenId, (route) => false);
+          displayToast('You\'ve Succesfully Logged In', context);
+        } else {
+          _firebaseAuth.signOut();
+          displayToast('Invalid ID and Password. Please try again', context);
+        }
+      });
+    } else {
+      displayToast('Some Error Occured', context);
+    }
+  }
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -31,6 +71,7 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TextField(
+                        controller: emailTextEditingController,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(fontSize: 20.0),
                         decoration: InputDecoration(
@@ -42,6 +83,7 @@ class LoginScreen extends StatelessWidget {
                                 TextStyle(color: Colors.grey, fontSize: 20.0)),
                       ),
                       TextField(
+                        controller: passwordTextEditingController,
                         obscureText: true,
                         style: TextStyle(fontSize: 20.0),
                         decoration: InputDecoration(
@@ -72,7 +114,9 @@ class LoginScreen extends StatelessWidget {
                 // )
                 ElevatedButton(
                   onPressed: () {
-                    print("Logged In");
+                    {
+                      loginUser(context);
+                    }
                   },
                   child: Text(
                     "Login",
@@ -94,7 +138,10 @@ class LoginScreen extends StatelessWidget {
                   height: 135.0,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, RegistrationScreen.ScreenId, (route) => false);
+                  },
                   child: Text(
                     "New User? Register Here.",
                     style: TextStyle(

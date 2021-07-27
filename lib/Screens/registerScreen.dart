@@ -1,10 +1,55 @@
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uberclone/main.dart';
+import 'loginscreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class RegistrationScreen extends StatelessWidget {
+  static const String ScreenId = "RegScreen";
+  TextEditingController nameTextEditingController = TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController phoneTextEditingController = TextEditingController();
+  TextEditingController passwordTextEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    displayToast(String mssg, BuildContext context) {
+      Fluttertoast.showToast(msg: mssg);
+    }
+
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    void registerNewUser(BuildContext context) async {
+      final firebaseUser = (await _firebaseAuth
+              .createUserWithEmailAndPassword(
+                  email: emailTextEditingController.text,
+                  password: passwordTextEditingController.text)
+              .catchError(
+        (errMsg) {
+          displayToast("Error: " + errMsg.toString(), context);
+        },
+      ))
+          .user;
+      if (firebaseUser == null) {
+        displayToast("New user Account has not been created", context);
+      } else {
+        UserReference.child(firebaseUser.uid);
+        Map UserData = {
+          "name": nameTextEditingController.text.trim(),
+          "email": emailTextEditingController.text.trim(),
+          "phone": phoneTextEditingController.text.trim(),
+        };
+        UserReference.child(firebaseUser.uid).set(UserData);
+        displayToast(
+            'Congrats! Your account has been created succesfully', context);
+        Navigator.pushNamedAndRemoveUntil(
+            context, LoginScreen.ScreenId, (route) => false);
+      }
+    }
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -33,6 +78,7 @@ class RegistrationScreen extends StatelessWidget {
                       TextField(
                         style: TextStyle(fontSize: 20.0),
                         keyboardType: TextInputType.name,
+                        controller: nameTextEditingController,
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             labelText: "Your Name",
@@ -42,6 +88,7 @@ class RegistrationScreen extends StatelessWidget {
                                 TextStyle(color: Colors.grey, fontSize: 20.0)),
                       ),
                       TextField(
+                        controller: phoneTextEditingController,
                         style: TextStyle(fontSize: 20.0),
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
@@ -50,9 +97,10 @@ class RegistrationScreen extends StatelessWidget {
                             labelStyle: TextStyle(
                                 fontSize: 20.0, fontFamily: 'BoltRegular'),
                             hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 20.0)),
+                                TextStyle(color: Colors.grey, fontSize: 20.0)),
                       ),
                       TextField(
+                        controller: emailTextEditingController,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(fontSize: 20.0),
                         decoration: InputDecoration(
@@ -64,6 +112,7 @@ class RegistrationScreen extends StatelessWidget {
                                 TextStyle(color: Colors.grey, fontSize: 20.0)),
                       ),
                       TextField(
+                        controller: passwordTextEditingController,
                         obscureText: true,
                         style: TextStyle(fontSize: 20.0),
                         decoration: InputDecoration(
@@ -94,7 +143,22 @@ class RegistrationScreen extends StatelessWidget {
                 // )
                 ElevatedButton(
                   onPressed: () {
-                    print("Logged In");
+
+                    if (nameTextEditingController.text.length < 5) {
+                      displayToast(
+                          "Name must be Atleast 5 Characters Long", context);
+                    } else if (!emailTextEditingController.text.contains("@")) {
+                      displayToast("Email must contain @ symbol", context);
+                    } else if (phoneTextEditingController.text.length < 10) {
+                      displayToast(
+                          "Phone Number must be 10 digits long", context);
+                    } else if (passwordTextEditingController.text.length < 6) {
+                      displayToast(
+                          "Password must be more than 6 Characters", context);
+                    }
+                    else{
+                      registerNewUser(context);
+                    }
                   },
                   child: Text(
                     "Register",
@@ -116,7 +180,10 @@ class RegistrationScreen extends StatelessWidget {
                   height: 50.0,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, LoginScreen.ScreenId, (route) => false);
+                  },
                   child: Text(
                     "Already a User? Login Here",
                     style: TextStyle(
