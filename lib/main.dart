@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.white),
       routes: {
         HomeScreen.ScreenId:(context)=>HomeScreen(),
         LoginScreen.ScreenId:(context)=>LoginScreen(),
