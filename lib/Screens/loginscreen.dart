@@ -60,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         body: ModalProgressHUD(
+          progressIndicator: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow) ,backgroundColor: Colors.black,),
           inAsyncCall: loading,
           child: SingleChildScrollView(
             child: Padding(
