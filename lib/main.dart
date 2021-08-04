@@ -4,6 +4,7 @@ import 'package:uberclone/Screens/homescreen.dart';
 import 'package:uberclone/Screens/loginscreen.dart';
 import 'package:uberclone/Screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

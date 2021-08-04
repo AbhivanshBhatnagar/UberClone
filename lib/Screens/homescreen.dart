@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uberclone/methods.dart';
 class HomeScreen extends StatefulWidget {
   static const String ScreenId = "HomeScreen";
 
@@ -26,8 +26,11 @@ void getLocation()async{
 
   LatLng LatLangPosition=LatLng(position.latitude,position.longitude);
 
-  CameraPosition cameraPosition= new CameraPosition(target: LatLangPosition,zoom: 14);
+  CameraPosition cameraPosition= new CameraPosition(target: LatLangPosition,zoom: 20);
   _googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+  String Address= await Methods.searchAddfromCoor(position);
+  print("This is your Address "+Address);
 }
   @override
   Widget build(BuildContext context) {
@@ -267,7 +270,7 @@ void getLocation()async{
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.black,
         onPressed: () => _googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude),zoom: 14))),
+            CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude),zoom: 20))),
         child: const Icon(Icons.center_focus_strong_rounded),
       ),
     );

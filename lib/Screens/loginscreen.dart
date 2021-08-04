@@ -7,6 +7,7 @@ import 'package:uberclone/Screens/homescreen.dart';
 import 'registerScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uberclone/main.dart';
+import 'package:geocoding/geocoding.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String ScreenId = "LoginScreen";
@@ -60,7 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         body: ModalProgressHUD(
-          progressIndicator: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow) ,backgroundColor: Colors.black,),
+          progressIndicator: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow),
+            backgroundColor: Colors.black,
+          ),
           inAsyncCall: loading,
           child: SingleChildScrollView(
             child: Padding(
@@ -129,9 +133,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   // )
                   ElevatedButton(
                     onPressed: () {
-                      {setState(() {
-                        loading=!loading;
-                      });
+                      {
+                        setState(() {
+                          loading = !loading;
+                        });
                         loginUser(context);
                       }
                     },
@@ -178,7 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-
           ),
         ),
       ),
