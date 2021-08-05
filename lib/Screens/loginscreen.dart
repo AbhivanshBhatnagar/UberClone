@@ -8,7 +8,7 @@ import 'registerScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uberclone/main.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'dart:async';
 class LoginScreen extends StatefulWidget {
   static const String ScreenId = "LoginScreen";
 

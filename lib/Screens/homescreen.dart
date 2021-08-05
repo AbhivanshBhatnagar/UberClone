@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uberclone/appdata.dart';
 import 'package:uberclone/methods.dart';
+import 'package:provider/provider.dart';
+
+import 'dart:async';
 class HomeScreen extends StatefulWidget {
   static const String ScreenId = "HomeScreen";
 
@@ -20,18 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
 late Position currentPosition;
 var geolocator=Geolocator();
 double MapPadding=0.0;
-void getLocation()async{
-  Position position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-  currentPosition=position;
+  void getLocation()async{
 
-  LatLng LatLangPosition=LatLng(position.latitude,position.longitude);
+    Position position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    currentPosition=position;
 
-  CameraPosition cameraPosition= new CameraPosition(target: LatLangPosition,zoom: 20);
-  _googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    LatLng LatLangPosition=LatLng(position.latitude,position.longitude);
 
-  String Address= await Methods.searchAddfromCoor(position);
-  print("This is your Address "+Address);
-}
+    CameraPosition cameraPosition= new CameraPosition(target: LatLangPosition,zoom: 20);
+    _googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String Address= await Methods.searchAddfromCoor(position,context);
+    print("This is your Address "+Address);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +211,7 @@ void getLocation()async{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Add Home",
+                            Provider.of<AppData>(context).PickupLocation !=null ? Provider.of<AppData>(context).PickupLocation.formattedaddress:"Add Home",
                             style: TextStyle(fontFamily: "BoltRegular"),
                           ),
                           SizedBox(

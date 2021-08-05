@@ -8,7 +8,7 @@ import 'package:uberclone/main.dart';
 import 'loginscreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'dart:async';
 class RegistrationScreen extends StatefulWidget {
   static const String ScreenId = "RegScreen";
 
