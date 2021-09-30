@@ -1,1 +1,2 @@
-String key="40e00490ece86c24112e1845bce28117";
+String MapMyIndiaKey="40e00490ece86c24112e1845bce28117";
+String GoogleKey="AIzaSyCj7a6JkG2PSYbADfe7TLhu92f2od2_t_8";

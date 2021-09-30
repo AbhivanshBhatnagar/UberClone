@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uberclone/Screens/searchscreen.dart';
 import 'package:uberclone/appdata.dart';
 import 'package:uberclone/methods.dart';
 import 'package:provider/provider.dart';
@@ -168,31 +169,36 @@ double MapPadding=0.0;
                   SizedBox(
                     height: 20.0,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black54,
-                              blurRadius: 6.0,
-                              spreadRadius: 0.5,
-                              offset: Offset(0.7, 0.7))
-                        ]),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.search,
-                          color: Colors.yellow,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          "Search Drop-off",
-                          style: TextStyle(fontFamily: "BoltRegular"),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 6.0,
+                                spreadRadius: 0.5,
+                                offset: Offset(0.7, 0.7))
+                          ]),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.search,
+                            color: Colors.yellow,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            "Search Drop-off",
+                            style: TextStyle(fontFamily: "BoltRegular"),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -207,22 +213,24 @@ double MapPadding=0.0;
                       SizedBox(
                         width: 12.0,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Provider.of<AppData>(context).PickupLocation !=null ? Provider.of<AppData>(context).PickupLocation.formattedaddress:"Add Home",
-                            style: TextStyle(fontFamily: "BoltRegular"),
-                          ),
-                          SizedBox(
-                            height: 4.0,
-                          ),
-                          Text("Your Home Address",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.0,
-                                  fontFamily: "BoltRegular"))
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              Text(
+                              Provider.of<AppData>(context).PickupLocation !=null ? Provider.of<AppData>(context).PickupLocation.formattedaddress:"Add Home",
+                              style: TextStyle(fontFamily: "BoltRegular",)
+                            ),
+                            SizedBox(
+                              height: 4.0,
+                            ),
+                            Text("Your Home Address",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.0,
+                                    fontFamily: "BoltRegular"))
+                          ],
+                        ),
                       )
                     ],
                   ),
