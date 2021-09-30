@@ -224,7 +224,7 @@ double MapPadding=0.0;
                             SizedBox(
                               height: 4.0,
                             ),
-                            Text("Your Home Address",
+                            Text("Home Address",
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12.0,
